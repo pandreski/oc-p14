@@ -1,9 +1,10 @@
-import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 import CreateEmployee from '../pages/CreateEmployee';
 import Layout from './Layout';
 import EmployeeList from '../pages/EmployeeList';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 /**
  * Material UI theme settings.
@@ -12,7 +13,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#93AD18',
-      dark: '#616f1d'
+      dark: '#6E8510'
     }
   }
 });
@@ -25,17 +26,17 @@ const theme = createTheme({
  *  <App />
  * )
  */
-function App() {
+export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<CreateEmployee />} />
-          <Route path='/employee-list' element={<EmployeeList />} />
-        </Route>
-      </Routes>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<CreateEmployee />} />
+            <Route path='/employee-list' element={<EmployeeList />} />
+          </Route>
+        </Routes>
+      </LocalizationProvider>
     </ThemeProvider>
   )
 }
-
-export default App

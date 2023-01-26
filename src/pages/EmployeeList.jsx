@@ -1,5 +1,5 @@
 export default function EmployeeList() {
   return (
-    <div>Employee List</div>
+    <h1>Employees list</h1>
   );
 }
