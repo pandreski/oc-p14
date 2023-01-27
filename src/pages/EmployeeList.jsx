@@ -1,5 +1,9 @@
+import { Container } from '@mui/material';
+
 export default function EmployeeList() {
   return (
-    <h1>Employees list</h1>
+    <Container maxWidth='lg'>
+      <h1>Employees list</h1>
+    </Container>
   );
 }

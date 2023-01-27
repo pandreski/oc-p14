@@ -1,4 +1,4 @@
-import { Grid, MenuItem, TextField, Button, Box } from '@mui/material';
+import { Grid, MenuItem, TextField, Button, Box, Container } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 import { useState } from 'react';
@@ -6,6 +6,9 @@ import { useFetch } from '../hooks/useFetch';
 import PropTypes from 'prop-types';
 import Fieldset from '../components/form/Fieldset';
 import Loader from '../components/Loader';
+import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { addEmployee } from '../features/employeesSlice';
 
 /**
  * Employee creation form.
@@ -20,25 +23,85 @@ import Loader from '../components/Loader';
  * )
  */
 function NewEmployeeForm({ usStates, departments }) {
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
   const [dateBirth, setDateBirth] = useState(null);
   const [dateStart, setDateStart] = useState(null);
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [usState, setUsState] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [department, setDepartment] = useState('');
+  const dispatch = useDispatch();
+
+  const handleResetForm = () => {
+    setFirstName('');
+    setLastName('');
+    setDateBirth(null);
+    setDateStart(null);
+    setStreet('');
+    setCity('');
+    setUsState('');
+    setZipCode('');
+    setDepartment('');
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const dataObj = {
+      id: uuidv4(),
+      firstName: formData.get('firstname'),
+      lastName: formData.get('lastname'),
+      birthDate: formData.get('birth-date'),
+      startDate: formData.get('start-date'),
+      street: formData.get('street'),
+      city: formData.get('city'),
+      state: formData.get('state'),
+      zipCode: formData.get('zipcode'),
+      department: formData.get('department'),
+    }
+
+    dispatch(addEmployee(dataObj));
+    handleResetForm();
+  }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Fieldset legend='Personal data'>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TextField id='firstname' name='firstname' label='First Name' fullWidth autoFocus variant='outlined' />
+            <TextField
+              id='firstname'
+              name='firstname'
+              label='First Name'
+              required
+              fullWidth
+              autoFocus
+              variant='outlined'
+              value={firstname}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField id='lastname' name='lastname' label='Last Name' fullWidth variant='outlined' />
+            <TextField
+              id='lastname'
+              name='lastname'
+              label='Last Name'
+              required
+              fullWidth
+              variant='outlined'
+              value={lastname}
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <DatePicker
               label='Date of birth'
               value={dateBirth}
               onChange={(newValue) => setDateBirth(newValue)}
-              renderInput={(params) => <TextField id='birth-date' name='birth-date' fullWidth {...params} />}
+              renderInput={(params) => <TextField id='birth-date' name='birth-date' variant='outlined' required fullWidth {...params} />}
               maxDate={moment().subtract(10, 'years')}
               minDate={moment().subtract(100, 'years')}
               disableFuture
@@ -50,7 +113,7 @@ function NewEmployeeForm({ usStates, departments }) {
               label='Start date'
               value={dateStart}
               onChange={(newValue) => setDateStart(newValue)}
-              renderInput={(params) => <TextField id='start-date' name='start-date' fullWidth {...params} />}
+              renderInput={(params) => <TextField id='start-date' name='start-date' variant='outlined' required fullWidth {...params} />}
             />
           </Grid>
         </Grid>
@@ -58,10 +121,28 @@ function NewEmployeeForm({ usStates, departments }) {
       <Fieldset legend='Address'>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TextField id='street' name='street' label='Street' fullWidth variant='outlined' />
+            <TextField
+              id='street'
+              name='street'
+              label='Street'
+              required
+              fullWidth
+              variant='outlined'
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField id='city' name='city' label='City' fullWidth variant='outlined' />
+            <TextField
+              id='city'
+              name='city'
+              label='City'
+              required
+              fullWidth
+              variant='outlined'
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -71,12 +152,26 @@ function NewEmployeeForm({ usStates, departments }) {
               fullWidth
               label='State'
               defaultValue=''
+              required
+              variant='outlined'
+              value={usState}
+              onChange={(e) => setUsState(e.target.value)}
             >
               {usStates?.map((option) => <MenuItem key={option.abbreviation} value={option.abbreviation}>{option.name}</MenuItem>)}
             </TextField>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField id='zipcode' name='zipcode' label='Zip code' type='number' fullWidth variant='outlined' />
+            <TextField
+              id='zipcode'
+              name='zipcode'
+              label='Zip code'
+              type='number'
+              required
+              fullWidth
+              variant='outlined'
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+            />
           </Grid>
         </Grid>
       </Fieldset>
@@ -90,6 +185,10 @@ function NewEmployeeForm({ usStates, departments }) {
               fullWidth
               label='Department'
               defaultValue=''
+              variant='outlined'
+              required
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
             >
               {departments?.map((option) => <MenuItem key={option.id} value={option.name}>{option.name}</MenuItem>)}
             </TextField>
@@ -130,14 +229,18 @@ export default function CreateEmployee() {
 
   return (
     <div>
-      <h1>Add a new employee</h1>
-      {
-        loadingStates || loadingDpt ? (
-          <Loader />
-        ) : (
-          <NewEmployeeForm usStates={statesData} departments={dptData} />
-        )
-      }
+      <Container maxWidth='lg'>
+        <h1>Add a new employee</h1>
+      </Container>
+      <Container maxWidth='md'>
+        {
+          loadingStates || loadingDpt ? (
+            <Loader />
+          ) : (
+            <NewEmployeeForm usStates={statesData} departments={dptData} />
+          )
+        }
+      </Container>
     </div>
   );
 }

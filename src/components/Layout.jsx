@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import { Global } from '@emotion/react';
-import { Container } from '@mui/material';
 
 /**
  * Page's layout including routing capability.
@@ -27,9 +26,7 @@ export default function Layout() {
       />
       <Header />
       <main>
-        <Container maxWidth='md'>
-          <Outlet />
-        </Container>
+        <Outlet />
       </main>
     </div>
   );
