@@ -23,27 +23,33 @@ import { addEmployee } from '../features/employeesSlice';
  * )
  */
 function NewEmployeeForm({ usStates, departments }) {
-  const [firstname, setFirstName] = useState('');
-  const [lastname, setLastName] = useState('');
-  const [dateBirth, setDateBirth] = useState(null);
-  const [dateStart, setDateStart] = useState(null);
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [usState, setUsState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [department, setDepartment] = useState('');
+  const initialFormState = {
+    firstname: '',
+    lastname: '',
+    dateBirth: null,
+    dateStart: null,
+    street: '',
+    city: '',
+    usState: '',
+    zipCode: '',
+    department: '',
+  }
+  const [formData, setFormData] = useState(initialFormState);
   const dispatch = useDispatch();
 
+  /**
+   * Get ISO date format.
+   * 
+   * @param {String} date   Date string with 'MM/DD/YYYY' format.
+   * @returns {String}      ISO 8601 date string (e.g.: "2014-09-08T08:02:17-05:00")
+   */
+  const getISODateFormat = (date) => {
+    return moment(date, 'MM-DD-YYYY').format();
+  }
+
+  // Reset all form states
   const handleResetForm = () => {
-    setFirstName('');
-    setLastName('');
-    setDateBirth(null);
-    setDateStart(null);
-    setStreet('');
-    setCity('');
-    setUsState('');
-    setZipCode('');
-    setDepartment('');
+    setFormData(initialFormState);
   }
 
   const handleSubmit = (e) => {
@@ -54,8 +60,8 @@ function NewEmployeeForm({ usStates, departments }) {
       id: uuidv4(),
       firstName: formData.get('firstname'),
       lastName: formData.get('lastname'),
-      birthDate: formData.get('birth-date'),
-      startDate: formData.get('start-date'),
+      birthDate: getISODateFormat(formData.get('birth-date')),
+      startDate: getISODateFormat(formData.get('start-date')),
       street: formData.get('street'),
       city: formData.get('city'),
       state: formData.get('state'),
@@ -80,8 +86,8 @@ function NewEmployeeForm({ usStates, departments }) {
               fullWidth
               autoFocus
               variant='outlined'
-              value={firstname}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={formData.firstname}
+              onChange={(e) => setFormData({...formData, firstname: e.target.value})}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -92,15 +98,15 @@ function NewEmployeeForm({ usStates, departments }) {
               required
               fullWidth
               variant='outlined'
-              value={lastname}
-              onChange={(e) => setLastName(e.target.value)}
+              value={formData.lastname}
+              onChange={(e) => setFormData({...formData, lastname: e.target.value})}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <DatePicker
               label='Date of birth'
-              value={dateBirth}
-              onChange={(newValue) => setDateBirth(newValue)}
+              value={formData.dateBirth}
+              onChange={(newValue) => setFormData({...formData, dateBirth: newValue})}
               renderInput={(params) => <TextField id='birth-date' name='birth-date' variant='outlined' required fullWidth {...params} />}
               maxDate={moment().subtract(10, 'years')}
               minDate={moment().subtract(100, 'years')}
@@ -111,8 +117,8 @@ function NewEmployeeForm({ usStates, departments }) {
           <Grid item xs={12} sm={6}>
             <DatePicker
               label='Start date'
-              value={dateStart}
-              onChange={(newValue) => setDateStart(newValue)}
+              value={formData.dateStart}
+              onChange={(newValue) => setFormData({...formData, dateStart: newValue})}
               renderInput={(params) => <TextField id='start-date' name='start-date' variant='outlined' required fullWidth {...params} />}
             />
           </Grid>
@@ -128,8 +134,8 @@ function NewEmployeeForm({ usStates, departments }) {
               required
               fullWidth
               variant='outlined'
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
+              value={formData.street}
+              onChange={(e) => setFormData({...formData, street: e.target.value})}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -140,8 +146,8 @@ function NewEmployeeForm({ usStates, departments }) {
               required
               fullWidth
               variant='outlined'
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              value={formData.city}
+              onChange={(e) => setFormData({...formData, city: e.target.value})}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -154,8 +160,8 @@ function NewEmployeeForm({ usStates, departments }) {
               defaultValue=''
               required
               variant='outlined'
-              value={usState}
-              onChange={(e) => setUsState(e.target.value)}
+              value={formData.usState}
+              onChange={(e) => setFormData({...formData, usState: e.target.value})}
             >
               {usStates?.map((option) => <MenuItem key={option.abbreviation} value={option.abbreviation}>{option.name}</MenuItem>)}
             </TextField>
@@ -169,8 +175,8 @@ function NewEmployeeForm({ usStates, departments }) {
               required
               fullWidth
               variant='outlined'
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
+              value={formData.zipCode}
+              onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
             />
           </Grid>
         </Grid>
@@ -187,8 +193,8 @@ function NewEmployeeForm({ usStates, departments }) {
               defaultValue=''
               variant='outlined'
               required
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
+              value={formData.department}
+              onChange={(e) => setFormData({...formData, department: e.target.value})}
             >
               {departments?.map((option) => <MenuItem key={option.id} value={option.name}>{option.name}</MenuItem>)}
             </TextField>
