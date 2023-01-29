@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material';
 import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid';
-import moment from 'moment/moment';
 import { useSelector } from 'react-redux';
+import { getHumanReadableDate } from '../utils/date';
 import { employeesSelect } from '../utils/selectors';
 
 function ListingTable() {
@@ -22,8 +22,8 @@ function ListingTable() {
   const columns = [
     { field: 'firstName', headerName: 'First name' },
     { field: 'lastName', headerName: 'Last name' },
-    { field: 'birthDate', headerName: 'Date of birth', type: 'date', renderCell: (params) => moment(params.row?.birthDate).format('MM/DD/YYYY') },
-    { field: 'startDate', headerName: 'Start date', type: 'date', renderCell: (params) => moment(params.row?.startDate).format('MM/DD/YYYY') },
+    { field: 'birthDate', headerName: 'Date of birth', type: 'date', renderCell: (params) => getHumanReadableDate(params.row?.birthDate) },
+    { field: 'startDate', headerName: 'Start date', type: 'date', renderCell: (params) => getHumanReadableDate(params.row?.startDate) },
     { field: 'street', headerName: 'Street', minWidth: 250 },
     { field: 'city', headerName: 'City', minWidth: 150 },
     { field: 'state', headerName: 'State', maxWidth: 70 },

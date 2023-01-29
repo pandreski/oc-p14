@@ -12,6 +12,7 @@ import { addEmployee } from '../features/employeesSlice';
 import { Modal } from '@pski/react-modal-component';
 import checked from '../assets/checked.png';
 import styled from '@emotion/styled';
+import { getISODateFormat } from '../utils/date';
 
 const ModalContent = styled.div`
   text-align: center;
@@ -64,16 +65,6 @@ function NewEmployeeForm({ usStates, departments }) {
     setModalOpen(false);
   }
 
-  /**
-   * Get ISO date format.
-   * 
-   * @param {String} date   Date string with 'MM/DD/YYYY' format.
-   * @returns {String}      ISO 8601 date string (e.g.: "2014-09-08T08:02:17-05:00")
-   */
-  const getISODateFormat = (date) => {
-    return moment(date, 'MM-DD-YYYY').format();
-  }
-
   // Reset all form states
   const handleResetForm = () => {
     setFormData(initialFormState);
@@ -103,7 +94,7 @@ function NewEmployeeForm({ usStates, departments }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid='create-form'>
         <Fieldset legend='Personal data'>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
