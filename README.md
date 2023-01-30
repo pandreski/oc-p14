@@ -4,6 +4,8 @@ Wealth Health HRnet is a HR app based on React JS where the user can add and man
 
 This project is part of the Openclassrooms program "Javascript/React application developer" (project #14).
 
+⚡️ [Live preview](https://hrnet-oc-p14.vercel.app/)
+
 ## 🚀 Requirements
 
 - Node 16.x
