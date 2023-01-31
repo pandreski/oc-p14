@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 /**
  * Fetching custom hook.
- * @param {String} uri  URI to fetch
- * @returns {Promise}    
+ * @param {String} uri  URI to fetch.
+ * @returns {Promise}   Object with the loading status and the data.
  */
 export function useFetch(uri) {
   const [data, setData] = useState(null);

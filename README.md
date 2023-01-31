@@ -2,6 +2,8 @@
 
 Wealth Health HRnet is a HR app based on React JS where the user can add and manage its employees. The data are stored in a persistent Redux State.
 
+By default, no data is present: you have to create a user by yourself. The redux state is persisted and saved in the client's local storage.
+
 This project is part of the Openclassrooms program "Javascript/React application developer" (project #14).
 
 ⚡️ [Live preview](https://hrnet-oc-p14.vercel.app/)

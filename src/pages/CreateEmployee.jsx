@@ -72,6 +72,7 @@ function NewEmployeeForm({ usStates, departments }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Get data from form's submission
     const formData = new FormData(e.currentTarget);
 
     const dataObj = {
@@ -87,8 +88,11 @@ function NewEmployeeForm({ usStates, departments }) {
       department: formData.get('department'),
     }
 
+    // Add form's data to redux store, and create a new employee.
     dispatch(addEmployee(dataObj));
+    // Clean form fields
     handleResetForm();
+    // Open modal's confirmation
     handleOpenModal();
   }
 
