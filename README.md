@@ -24,6 +24,7 @@ This project is part of the Openclassrooms program "Javascript/React application
 - [Material UI](https://mui.com/)
 - [Emotion](https://emotion.sh/docs/introduction)
 - [Eslint](https://eslint.org/)
+- [Vitest](https://vitest.dev/) & [Testing Library](https://testing-library.com/)
 
 ## 🏗️ Installation steps
 
@@ -31,3 +32,13 @@ This project is part of the Openclassrooms program "Javascript/React application
 2. Install the dependencies with `yarn install`,
 3. Start the project with `yarn dev`,
 4. Open the app with the link given in your terminal.
+
+## 📊 Tests
+
+```
+// Run unit tests
+yarn test
+
+// Run tests coverage
+yarn coverage
+```
