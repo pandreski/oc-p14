@@ -1,5 +1,6 @@
 import { Grid, MenuItem, TextField, Button, Box, Container } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import { useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
@@ -40,7 +41,7 @@ const ModalContent = styled.div`
  *  <NewEmployeeForm usStates={usStates} departments={departments} />
  * )
  */
-function NewEmployeeForm({ usStates, departments }) {
+export function NewEmployeeForm({ usStates, departments }) {
   const initialFormState = {
     firstname: '',
     lastname: '',
@@ -98,143 +99,146 @@ function NewEmployeeForm({ usStates, departments }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} data-testid='create-form'>
-        <Fieldset legend='Personal data'>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='firstname'
-                name='firstname'
-                label='First Name'
-                required
-                fullWidth
-                autoFocus
-                variant='outlined'
-                value={formData.firstname}
-                onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
-              />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en'>
+        <form onSubmit={handleSubmit} data-testid='create-form'>
+          <Fieldset legend='Personal data'>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='firstname'
+                  name='firstname'
+                  label='First Name'
+                  required
+                  fullWidth
+                  autoFocus
+                  variant='outlined'
+                  value={formData.firstname}
+                  onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='lastname'
+                  name='lastname'
+                  label='Last Name'
+                  required
+                  fullWidth
+                  variant='outlined'
+                  value={formData.lastname}
+                  onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DatePicker
+                  label='Date of birth'
+                  value={formData.dateBirth}
+                  onChange={(newValue) => setFormData({ ...formData, dateBirth: newValue })}
+                  renderInput={(params) => <TextField id='birth-date' name='birth-date' variant='outlined' required fullWidth {...params} />}
+                  maxDate={moment().subtract(10, 'years')}
+                  minDate={moment().subtract(100, 'years')}
+                  disableFuture
+                  openTo='year'
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DatePicker
+                  label='Start date'
+                  value={formData.dateStart}
+                  onChange={(newValue) => setFormData({ ...formData, dateStart: newValue })}
+                  renderInput={(params) => <TextField id='start-date' name='start-date' variant='outlined' required fullWidth {...params} />}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='lastname'
-                name='lastname'
-                label='Last Name'
-                required
-                fullWidth
-                variant='outlined'
-                value={formData.lastname}
-                onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-              />
+          </Fieldset>
+          <Fieldset legend='Address'>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='street'
+                  name='street'
+                  label='Street'
+                  required
+                  fullWidth
+                  variant='outlined'
+                  value={formData.street}
+                  onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='city'
+                  name='city'
+                  label='City'
+                  required
+                  fullWidth
+                  variant='outlined'
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='state'
+                  name='state'
+                  select
+                  fullWidth
+                  label='State'
+                  defaultValue=''
+                  required
+                  variant='outlined'
+                  value={formData.usState}
+                  onChange={(e) => setFormData({ ...formData, usState: e.target.value })}
+                  data-testid='state-selector'
+                >
+                  {usStates?.map((option) => <MenuItem key={option.abbreviation} value={option.abbreviation}>{option.name}</MenuItem>)}
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id='zipcode'
+                  name='zipcode'
+                  label='Zip code'
+                  type='number'
+                  required
+                  fullWidth
+                  variant='outlined'
+                  value={formData.zipCode}
+                  onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DatePicker
-                label='Date of birth'
-                value={formData.dateBirth}
-                onChange={(newValue) => setFormData({ ...formData, dateBirth: newValue })}
-                renderInput={(params) => <TextField id='birth-date' name='birth-date' variant='outlined' required fullWidth {...params} />}
-                maxDate={moment().subtract(10, 'years')}
-                minDate={moment().subtract(100, 'years')}
-                disableFuture
-                openTo='year'
-              />
+          </Fieldset>
+          <Fieldset legend='Department'>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  id='department'
+                  name='department'
+                  select
+                  fullWidth
+                  label='Department'
+                  defaultValue=''
+                  variant='outlined'
+                  required
+                  value={formData.department}
+                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                >
+                  {departments?.map((option) => <MenuItem key={option.id} value={option.name}>{option.name}</MenuItem>)}
+                </TextField>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DatePicker
-                label='Start date'
-                value={formData.dateStart}
-                onChange={(newValue) => setFormData({ ...formData, dateStart: newValue })}
-                renderInput={(params) => <TextField id='start-date' name='start-date' variant='outlined' required fullWidth {...params} />}
-              />
-            </Grid>
-          </Grid>
-        </Fieldset>
-        <Fieldset legend='Address'>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='street'
-                name='street'
-                label='Street'
-                required
-                fullWidth
-                variant='outlined'
-                value={formData.street}
-                onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='city'
-                name='city'
-                label='City'
-                required
-                fullWidth
-                variant='outlined'
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='state'
-                name='state'
-                select
-                fullWidth
-                label='State'
-                defaultValue=''
-                required
-                variant='outlined'
-                value={formData.usState}
-                onChange={(e) => setFormData({ ...formData, usState: e.target.value })}
-              >
-                {usStates?.map((option) => <MenuItem key={option.abbreviation} value={option.abbreviation}>{option.name}</MenuItem>)}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id='zipcode'
-                name='zipcode'
-                label='Zip code'
-                type='number'
-                required
-                fullWidth
-                variant='outlined'
-                value={formData.zipCode}
-                onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
-              />
-            </Grid>
-          </Grid>
-        </Fieldset>
-        <Fieldset legend='Department'>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                id='department'
-                name='department'
-                select
-                fullWidth
-                label='Department'
-                defaultValue=''
-                variant='outlined'
-                required
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-              >
-                {departments?.map((option) => <MenuItem key={option.id} value={option.name}>{option.name}</MenuItem>)}
-              </TextField>
-            </Grid>
-          </Grid>
-        </Fieldset>
-        <Box
-          sx={{
-            marginY: 4,
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Button variant='contained' type='submit' size='large' fullWidth>Save</Button>
-        </Box>
-      </form>
+          </Fieldset>
+          <Box
+            sx={{
+              marginY: 4,
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
+            <Button variant='contained' type='submit' size='large' fullWidth>Save</Button>
+          </Box>
+        </form>
+      </LocalizationProvider>
 
       <Modal
         isOpen={modalOpen}
@@ -271,7 +275,7 @@ export default function CreateEmployee() {
   return (
     <div>
       <Container maxWidth='lg'>
-        <h1>Add a new employee</h1>
+        <h1 data-testid='page-title'>Add a new employee</h1>
       </Container>
       <Container maxWidth='md'>
         {

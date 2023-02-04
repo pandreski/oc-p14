@@ -4,6 +4,14 @@ import { useSelector } from 'react-redux';
 import { getHumanReadableDate } from '../utils/date';
 import { employeesSelect } from '../utils/selectors';
 
+/**
+ * Table component to list all employees.
+ * @component
+ * @example
+ * return (
+ *  <ListingTable />
+ * )
+ */
 function ListingTable() {
   const employeesList = useSelector(employeesSelect);
   const rows = employeesList.map((employee) => ({
@@ -44,6 +52,14 @@ function ListingTable() {
   );
 }
 
+/**
+ * Dedicated page to list all employees in a table.
+ * @component
+ * @example
+ * return (
+ *  <EmployeeList />
+ * )
+ */
 export default function EmployeeList() {
   return (
     <Container maxWidth='lg'>
