@@ -1,17 +1,19 @@
-import styled from '@emotion/styled';
+import { styled, css } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
-const FieldsWrapper = styled.fieldset`
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  border-color: ${(props) => props.theme.palette.primary.main};
-  border-width: 1px;
-  margin: 2.5em 0 0;
-  padding: 1.3em 0 0;
-`
+const FieldsWrapper = styled('fieldset')(
+  ({theme}) => css`
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-color: ${theme.palette.primary.main};
+    border-width: 1px;
+    margin: 2.5em 0 0;
+    padding: 1.3em 0 0;
+  `
+);
 
-const Legend = styled.legend`
+const Legend = styled('legend')`
   text-align: center;
   padding: 0 15px;
   text-transform: uppercase;
